@@ -46,6 +46,7 @@ import com.skt.nugu.sdk.external.jademarble.SpeexEncoder
 import com.skt.nugu.sdk.external.silvertray.NuguOpusPlayer
 import com.skt.nugu.sdk.client.NuguClient
 import com.skt.nugu.sdk.client.port.transport.grpc.GrpcTransportFactory
+import com.skt.nugu.sdk.client.port.transport.grpc2.GrpcTransportFactory2
 import com.skt.nugu.sdk.core.interfaces.capability.asr.ASRAgentInterface
 import com.skt.nugu.sdk.core.interfaces.client.NuguClientInterface
 import com.skt.nugu.sdk.core.interfaces.common.NamespaceAndName
@@ -122,7 +123,7 @@ class NuguAndroidClient private constructor(
             override fun createExternalSpeaker(): Speaker? = null
         }
         internal var defaultEpdTimeoutMillis: Long = 10000L
-        internal var transportFactory: TransportFactory = GrpcTransportFactory()
+        internal var transportFactory: TransportFactory = GrpcTransportFactory2()
         internal var endPointDetector: AudioEndPointDetector? = null
         internal var batteryStatusProvider: BatteryStatusProvider? = AndroidBatteryStatusProvider(context)
         internal var defaultMicrophone: Microphone? = null

@@ -30,6 +30,8 @@ import com.skt.nugu.sdk.core.interfaces.context.ContextStateProvider
 import com.skt.nugu.sdk.platform.android.login.auth.NuguOAuth
 import com.skt.nugu.sdk.external.jademarble.EndPointDetector
 import com.skt.nugu.sampleapp.utils.PreferenceHelper
+import com.skt.nugu.sdk.client.port.transport.grpc.GrpcTransportFactory
+import com.skt.nugu.sdk.client.port.transport.grpc.Options
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executors

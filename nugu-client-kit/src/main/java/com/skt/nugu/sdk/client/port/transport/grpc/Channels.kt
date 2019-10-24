@@ -30,9 +30,7 @@ import java.util.logging.Level
 internal class Channels(val defaultOptions: Options) {
     private var currentOptions = defaultOptions.copy()
     private var managedChannel: ManagedChannel? = null
-    private var channel: Channel? = null
     private var backoff = Backoff()
-    private var callback: Runnable? = null
     var serverPolicyList = ConcurrentLinkedQueue<PolicyResponse.ServerPolicy>()
     var compressorName: String = "gzip"
 
@@ -79,11 +77,7 @@ internal class Channels(val defaultOptions: Options) {
         if(this.managedChannel != null) {
             Logger.e(TAG, "[connect] managedChannel is $managedChannel")
         }
-        this.managedChannel = builder.build()
-        this.callback = callback
-        this.channel = ClientInterceptors.intercept(managedChannel,
-            HeaderClientInterceptor(authorization)
-        )
+        this.managedChannel = builder.intercept(HeaderClientInterceptor(authorization)).build()
         waitForChannelStateChange(managedChannel?.getState(true), callback)
         return this
     }
@@ -97,8 +91,7 @@ internal class Channels(val defaultOptions: Options) {
             Logger.d(TAG, "Entering $newState state")
 
             if(newState == ConnectivityState.TRANSIENT_FAILURE) {
-                this.callback?.run()
-                this.callback = null
+                callback?.run()
                 return@notifyWhenStateChanged
             }
 
@@ -111,7 +104,7 @@ internal class Channels(val defaultOptions: Options) {
      * @return grpc(Channel) object
      */
     fun getChannel(): Channel? {
-        return channel
+        return managedChannel
     }
 
     /**
@@ -149,7 +142,6 @@ internal class Channels(val defaultOptions: Options) {
      * Explicitly clean up resources.
      */
     fun shutdown() {
-        this.callback = null
         var isTerminated = false
         managedChannel?.apply {
             try {

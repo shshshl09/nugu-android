@@ -106,5 +106,4 @@ internal class PingService(val observer: GrpcServiceListener) :
             this.blockingStub = null
         }
     }
-
 }

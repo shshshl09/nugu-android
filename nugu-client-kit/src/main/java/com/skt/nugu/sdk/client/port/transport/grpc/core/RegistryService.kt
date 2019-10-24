@@ -28,6 +28,7 @@ internal class RegistryService(private val observer: GrpcServiceListener) :
     companion object {
         private const val TAG = "RegistryService"
     }
+
     @Volatile
     private var isShutdown = true
     private var blockingStub : RegistryGrpc.RegistryBlockingStub? = null
