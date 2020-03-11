@@ -32,6 +32,7 @@ import com.skt.nugu.sdk.core.interfaces.context.ContextStateProvider
 import com.skt.nugu.sdk.platform.android.login.auth.NuguOAuth
 import com.skt.nugu.sdk.external.jademarble.EndPointDetector
 import com.skt.nugu.sampleapp.utils.PreferenceHelper
+import com.skt.nugu.sampleapp.wakeup.Ai700MicPowerMeasure
 import com.skt.nugu.sdk.external.keensense.KeensenseKeywordDetector
 import com.skt.nugu.sdk.platform.android.speechrecognizer.measure.SimplePcmPowerMeasure
 import java.io.File
@@ -165,7 +166,7 @@ object ClientManager : AudioPlayerAgentInterface.Listener {
             throw RuntimeException("asrAgent cannot be null")
         }
 
-        val keensenseKeywordDetector = KeensenseKeywordDetector(keywordResourceProvider.provideAria(), SimplePcmPowerMeasure())
+        val keensenseKeywordDetector = KeensenseKeywordDetector(keywordResourceProvider.provideAria(), Ai700MicPowerMeasure())
         keywordDetector = keensenseKeywordDetector
         speechRecognizerAggregator = SpeechRecognizerAggregator(
             keensenseKeywordDetector,
