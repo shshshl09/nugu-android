@@ -44,6 +44,7 @@ import com.skt.nugu.sampleapp.template.FragmentTemplateRenderer
 import com.skt.nugu.sampleapp.utils.*
 import com.skt.nugu.sampleapp.widget.BottomSheetController
 import com.skt.nugu.sdk.agent.system.SystemAgentInterface
+import com.skt.nugu.sdk.core.utils.Logger
 
 class MainActivity : AppCompatActivity(), SpeechRecognizerAggregatorInterface.OnStateChangeListener,
     NavigationView.OnNavigationItemSelectedListener
@@ -166,7 +167,12 @@ class MainActivity : AppCompatActivity(), SpeechRecognizerAggregatorInterface.On
 
     private fun tryStartListeningWithTrigger() {
         if (PreferenceHelper.enableNugu(this) && PreferenceHelper.enableTrigger(this) && !speechRecognizerAggregator.isActive()) {
-            speechRecognizerAggregator.startListeningWithTrigger()
+            val collector = WakeupPCMCollector(object: WakeupPCMCollector.Listener {
+                override fun onCollect(dialogRequestId: String, buffer: ByteArray) {
+                    Logger.d(TAG, "[onCollect] $dialogRequestId, ${buffer.size}")
+                }
+            })
+            speechRecognizerAggregator.startListeningWithTrigger(triggerCallback = collector, listeningCallback = collector)
         }
     }
 
