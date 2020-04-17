@@ -17,6 +17,8 @@ package com.skt.nugu.sdk.core.attachment
 
 import com.skt.nugu.sdk.core.interfaces.attachment.Attachment
 import com.skt.nugu.sdk.core.utils.Logger
+import java.nio.ByteBuffer
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -32,7 +34,7 @@ class StreamAttachment(private val attachmentId: String) : Attachment {
     }
 
     private val bufferEventListeners = HashSet<BufferEventListener>()
-    private val attachmentContents = ArrayList<ByteArray>()
+    private val attachmentContents = CopyOnWriteArrayList<ByteArray>()
     private var reachEnd = false
     private val lock = ReentrantReadWriteLock()
     private val writer: Attachment.Writer = object : Attachment.Writer {
@@ -137,6 +139,68 @@ class StreamAttachment(private val attachmentId: String) : Attachment {
                 isReading = false
 
                 Logger.d(TAG, "[read] $sizeInBytes, $leftSizeInBytes / id: $attachmentId")
+                return sizeInBytes - leftSizeInBytes
+            }
+
+            override fun read(byteBuffer: ByteBuffer, offsetInBytes: Int, sizeInBytes: Int): Int {
+                var dstOffsetInBytes = offsetInBytes
+                var leftSizeInBytes = sizeInBytes
+
+                while (leftSizeInBytes > 0 && !isClosing) {
+                    isReading = true
+                    var shouldWaitWrite = false
+
+                    lock.read {
+                        if (attachmentContents.isNotEmpty()) {
+                            val source = attachmentContents.first()
+                            val readableSize = source.size - contentPosition
+                            val readSize = Math.min(readableSize, leftSizeInBytes)
+
+                            byteBuffer.position(offsetInBytes)
+                            byteBuffer.put(source, contentPosition, readSize)
+//                            System.arraycopy(
+//                                source,
+//                                contentPosition,
+//                                bytes,
+//                                dstOffsetInBytes,
+//                                readSize
+//                            )
+
+                            contentPosition += readSize
+                            if (contentPosition == source.size) {
+                                contentPosition = 0
+                                attachmentContents.remove(source)
+                                Logger.d(TAG, "[read] remove source")
+                            }
+
+                            dstOffsetInBytes += readSize
+                            leftSizeInBytes -= readSize
+                        } else if (reachEnd) {
+                            // 끝까지 읽었음.
+                            isReading = false
+                            if (leftSizeInBytes == sizeInBytes) {
+                                return -1
+                            } else {
+                                return sizeInBytes - leftSizeInBytes
+                            }
+                        } else {
+                            // 읽을 데이터가 하나도 준비되있지 않음. (UNDERRUN)
+                            shouldWaitWrite = true
+                        }
+                    }
+
+                    if (shouldWaitWrite && !isClosing) {
+                        synchronized(waitLock) {
+                            if (!isClosing && !reachEnd) {
+                                waitLock.wait(50)
+                            }
+                        }
+                    }
+                }
+
+                isReading = false
+
+//                Logger.d(TAG, "[read-bytebuffer] $sizeInBytes, $leftSizeInBytes / id: $attachmentId")
                 return sizeInBytes - leftSizeInBytes
             }
 
