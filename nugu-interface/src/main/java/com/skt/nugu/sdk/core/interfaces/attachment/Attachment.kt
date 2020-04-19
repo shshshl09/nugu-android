@@ -42,6 +42,11 @@ interface Attachment {
          */
         fun write(bytes: ByteArray)
 
+        /** Write buffer into the attachment
+         * @param byteBuffer the data to write
+         */
+        fun write(byteBuffer: ByteBuffer)
+
         /**
          * Close the writer
          */
@@ -75,6 +80,8 @@ interface Attachment {
          * @return the total number of bytes which read, or or -1 if cannot read anymore because of various reason.
          */
         fun read(byteBuffer: ByteBuffer, offsetInBytes: Int, sizeInBytes: Int): Int
+
+        fun readChunk(): ByteBuffer?
 
         /**
          * Close the reader

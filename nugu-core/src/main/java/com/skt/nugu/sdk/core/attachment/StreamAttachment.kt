@@ -33,14 +33,23 @@ class StreamAttachment(private val attachmentId: String) : Attachment {
     }
 
     private val bufferEventListeners = HashSet<BufferEventListener>()
-    private val attachmentContents = ArrayList<ByteArray>()
+    private val attachmentContents = ArrayList<ByteBuffer>()
     private var reachEnd = false
     private val lock = ReentrantReadWriteLock()
     private val writer: Attachment.Writer = object : Attachment.Writer {
         override fun write(bytes: ByteArray) {
             lock.write {
-                attachmentContents.add(bytes)
+                attachmentContents.add(ByteBuffer.wrap(bytes))
                 Logger.d(TAG, "[write] size : ${bytes.size} / id: $attachmentId")
+            }
+
+            notifyBufferFilled()
+        }
+
+        override fun write(byteBuffer: ByteBuffer) {
+            lock.write {
+                attachmentContents.add(byteBuffer)
+                Logger.d(TAG, "[write] size : ${byteBuffer.capacity()} / id: $attachmentId")
             }
 
             notifyBufferFilled()
@@ -75,6 +84,7 @@ class StreamAttachment(private val attachmentId: String) : Attachment {
             private var isClosing = false
             private var isReading = false
             private val waitLock = Object()
+            private var chunkIndex = 0
 
             init {
                 synchronized(bufferEventListeners) {
@@ -102,6 +112,28 @@ class StreamAttachment(private val attachmentId: String) : Attachment {
                 }
             }
 
+            override fun readChunk(): ByteBuffer? {
+                while(!isClosing) {
+                    lock.read {
+                        if(attachmentContents.size > chunkIndex) {
+                            return attachmentContents[chunkIndex++]
+                        }
+
+                        if(reachEnd) {
+                            return null
+                        }
+                    }
+
+                    synchronized(waitLock) {
+                        if (!isClosing && !reachEnd) {
+                            waitLock.wait(50)
+                        }
+                    }
+                }
+
+                return null
+            }
+
             private fun readInternal(
                 offsetInBytes: Int,
                 sizeInBytes: Int,
@@ -117,13 +149,15 @@ class StreamAttachment(private val attachmentId: String) : Attachment {
                     lock.read {
                         if (attachmentContents.size > contentIndex) {
                             val source = attachmentContents[contentIndex]
-                            val readableSize = source.size - contentPosition
+                            val readableSize = source.remaining()
                             val readSize = Math.min(readableSize, leftSizeInBytes)
+                            val temp = ByteArray(readSize)
+                            source.get(temp)
 
-                            readFunction.invoke(source, contentPosition, dstOffsetInBytes, readSize)
+                            readFunction.invoke(temp, 0, dstOffsetInBytes, readSize)
 
                             contentPosition += readSize
-                            if (contentPosition == source.size) {
+                            if (contentPosition == source.capacity()) {
                                 contentPosition = 0
                                 contentIndex++
                             }
