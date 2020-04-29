@@ -454,7 +454,7 @@ class DefaultASRAgent(
         jsonContext: String) {
         Logger.d(
             TAG,
-            "[executeStartRecognitionOnContextAvailable] state: $state, focusState: $focusState"
+            "[executeStartRecognitionOnContextAvailable] state: $state, focusState: $focusState, callback: $callback"
         )
         if(isRequested) {
             callback?.onError(UUIDGeneration.timeUUID().toString(), ASRAgentInterface.StartRecognitionCallback.ErrorType.ERROR_CANNOT_START_RECOGNIZER)
@@ -511,7 +511,7 @@ class DefaultASRAgent(
     }
 
     private fun executeOnFocusChanged(newFocus: FocusState) {
-        Logger.d(TAG, "[executeOnFocusChanged] newFocus: $newFocus")
+        Logger.d(TAG, "[executeOnFocusChanged] newFocus: $newFocus, callback: $startRecognitionCallback")
 
         focusState = newFocus
 
@@ -560,7 +560,7 @@ class DefaultASRAgent(
         callback: ASRAgentInterface.StartRecognitionCallback?,
         jsonContext: String
     ) {
-        Logger.d(TAG, "[executeInternalStartRecognition]")
+        Logger.d(TAG, "[executeInternalStartRecognition] callback: $callback")
         executeSelectSpeechProcessor()
         currentRequest = currentSpeechRecognizer.start(
             audioInputStream,
@@ -600,6 +600,7 @@ class DefaultASRAgent(
                 }
             }
         ).also {
+            Logger.d(TAG, "[executeInternalStartRecognition::also] callback: $callback, it: $it")
             if(it == null) {
                 callback?.onError(UUIDGeneration.timeUUID().toString(), ASRAgentInterface.StartRecognitionCallback.ErrorType.ERROR_CANNOT_START_RECOGNIZER)
             } else {
