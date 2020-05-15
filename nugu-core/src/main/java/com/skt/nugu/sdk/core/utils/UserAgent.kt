@@ -40,6 +40,7 @@ class UserAgent {
                 .append("OpenSDK").append("/").append(sdkVersion)
                 .append(" ")
                 .append("Client").append("/").append(clientVersion)
+            Logger.d("userAgent", builder.toString())
             return builder.toString()
         }
     }
