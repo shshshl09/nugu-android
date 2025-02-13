@@ -78,6 +78,8 @@ class AudioPlayerTemplateHandler(
     private data class TemplatePayload(
         @SerializedName("playServiceId")
         val playServiceId: String?,
+        @SerializedName("service")
+        val service: JsonObject?,
         @SerializedName("sourceType")
         val sourceType: DefaultAudioPlayerAgent.SourceType?,
         @SerializedName("token")
@@ -408,11 +410,13 @@ class AudioPlayerTemplateHandler(
         val directiveInfo = templateDirectiveInfoMap[templateId]
             ?: throw IllegalStateException("[setElementSelected] invalid templateId: $templateId (maybe cleared or not rendered yet)")
 
-        if(directiveInfo.payload.playServiceId.isNullOrBlank()) {
+        val payload = directiveInfo.payload
+
+        if(payload.playServiceId.isNullOrBlank()) {
             throw IllegalStateException("[setElementSelected] empty playServiceId: $templateId")
         }
 
-        return elementSelectedEventHandler.setElementSelected(directiveInfo.payload.playServiceId ,token, postback, callback)
+        return elementSelectedEventHandler.setElementSelected(payload.playServiceId ,token, postback, payload.service, callback)
     }
 
     private fun setHandlingFailed(info: DirectiveInfo, description: String) {

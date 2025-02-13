@@ -100,6 +100,8 @@ class DefaultAudioPlayerAgent(
         val sourceType: SourceType?,
         @SerializedName("playServiceId")
         val playServiceId: String,
+        @SerializedName("service")
+        val service: JsonObject?,
         @SerializedName("cacheKey")
         val cacheKey: String?,
         @SerializedName("audioItem")
@@ -112,7 +114,7 @@ class DefaultAudioPlayerAgent(
         private const val TAG = "AudioPlayerAgent"
 
         const val NAMESPACE = "AudioPlayer"
-        val VERSION = Version(1,10)
+        val VERSION = Version(1,11)
 
         const val EVENT_NAME_PLAYBACK_STARTED = "PlaybackStarted"
         const val EVENT_NAME_PLAYBACK_FINISHED = "PlaybackFinished"
@@ -1665,7 +1667,11 @@ class DefaultAudioPlayerAgent(
     }
 
     private fun sendPlaybackFinishedEvent() {
-        sendEventWithOffset(name = EVENT_NAME_PLAYBACK_FINISHED, fullContext = true)
+        sendEventWithOffset(
+            name = EVENT_NAME_PLAYBACK_FINISHED,
+            includeServicePayload = true,
+            fullContext = true
+        )
     }
 
     private fun sendPlaybackStoppedEvent(stopReason: AudioPlayerAgentInterface.StopReason) {
@@ -1708,9 +1714,10 @@ class DefaultAudioPlayerAgent(
         name: String,
         offset: Long = getOffsetInMilliseconds(),
         condition: () -> Boolean = { true },
+        includeServicePayload: Boolean = false,
         fullContext: Boolean = false
     ) {
-        sendEvent(name, offset, condition, fullContext)
+        sendEvent(name, offset, condition, includeServicePayload, fullContext)
     }
 
     private fun sendPlaybackFailedEvent(type: ErrorType, errorMsg: String) {
@@ -1753,46 +1760,58 @@ class DefaultAudioPlayerAgent(
     }
 
     private fun sendProgressReportDelay(actual: Long) {
-        sendEvent(EVENT_NAME_PROGRESS_REPORT_DELAY_ELAPSED, actual, { true }, false)
+        sendEvent(
+            eventName = EVENT_NAME_PROGRESS_REPORT_DELAY_ELAPSED,
+            offset = actual,
+            condition = { true },
+            includeServicePayload = false,
+            fullContext = false
+        )
     }
 
     private fun sendProgressReportInterval(actual: Long) {
-        sendEvent(EVENT_NAME_PROGRESS_REPORT_INTERVAL_ELAPSED, actual, { true }, false)
+        sendEvent(
+            eventName = EVENT_NAME_PROGRESS_REPORT_INTERVAL_ELAPSED,
+            offset = actual,
+            condition = { true },
+            includeServicePayload = true,
+            fullContext = false
+        )
     }
 
     private fun sendNextCommandIssued() {
         sendEventWithOffset(
             name = NAME_NEXT_COMMAND_ISSUED,
-            condition = { true }, fullContext = true
+            condition = { true }, includeServicePayload = true, fullContext = true
         )
     }
 
     private fun sendPreviousCommandIssued() {
         sendEventWithOffset(
             name = NAME_PREVIOUS_COMMAND_ISSUED,
-            condition = { true }, fullContext = true
+            condition = { true }, includeServicePayload = true, fullContext = true
         )
     }
 
     private fun sendPlayCommandIssued() {
         sendEventWithOffset(
             name = NAME_PLAY_COMMAND_ISSUED,
-            condition = { currentActivity.isActive() }, fullContext = true)
+            condition = { currentActivity.isActive() }, includeServicePayload = true, fullContext = true)
     }
 
     private fun sendPauseCommandIssued() {
         sendEventWithOffset(
             name = NAME_PAUSE_COMMAND_ISSUED,
-            condition = { currentActivity.isActive() }, fullContext = true)
+            condition = { currentActivity.isActive() }, includeServicePayload = true, fullContext = true)
     }
 
     private fun sendStopCommandIssued() {
         sendEventWithOffset(
             name = NAME_STOP_COMMAND_ISSUED,
-            condition = { currentActivity.isActive() }, fullContext = true)
+            condition = { currentActivity.isActive() }, includeServicePayload = true, fullContext = true)
     }
 
-    private fun sendEvent(eventName: String, offset: Long, condition: () -> Boolean, fullContext: Boolean) {
+    private fun sendEvent(eventName: String, offset: Long, condition: () -> Boolean, includeServicePayload: Boolean, fullContext: Boolean) {
         currentItem?.apply {
             val dialogRequestId = UUIDGeneration.timeUUID().toString()
             val messageId = UUIDGeneration.timeUUID().toString()
@@ -1811,6 +1830,11 @@ class DefaultAudioPlayerAgent(
                         .payload(
                             JsonObject().apply {
                                 addProperty("playServiceId", payload.playServiceId)
+                                if(includeServicePayload) {
+                                    payload.service?.let {
+                                        add("service", it)
+                                    }
+                                }
                                 addProperty("token", token)
                                 addProperty("offsetInMilliseconds", offset)
                             }.toString()

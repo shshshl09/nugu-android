@@ -39,7 +39,7 @@ abstract class ElementSelectedEventHandler(
     abstract fun getNamespace(): String
     abstract fun getVersion(): String
 
-    fun setElementSelected(playServiceId: String, token: String, postback: String?, callback: DisplayInterface.OnElementSelectedCallback?): String {
+    fun setElementSelected(playServiceId: String, token: String, postback: String?, service: JsonObject?, callback: DisplayInterface.OnElementSelectedCallback?): String {
         val dialogRequestId = UUIDGeneration.timeUUID().toString()
 
         contextGetter.getContext(object : IgnoreErrorContextRequestor() {
@@ -54,6 +54,9 @@ abstract class ElementSelectedEventHandler(
                         JsonObject().apply {
                             addProperty(KEY_TOKEN, token)
                             addProperty(KEY_PLAY_SERVICE_ID, playServiceId)
+                            service?.let {
+                                add("service", it)
+                            }
                             postback?.let {
                                 add("postback", JsonParser.parseString(it))
                             }

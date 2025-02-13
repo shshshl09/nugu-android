@@ -89,6 +89,9 @@ class AudioPlayerDirectivePreProcessor :
     ): Directive? {
         return try {
             template.addProperty("playServiceId", playPayload.playServiceId)
+            playPayload.service?.let {
+                template.add("service", it)
+            }
 
             val type = template.getAsJsonPrimitive("type").asString.split(".")
             val namespace = type[0]

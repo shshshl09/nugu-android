@@ -495,7 +495,7 @@ class DisplayAgent(
             throw IllegalStateException("[setElementSelected] empty playServiceId: $templateId")
         }
 
-        return elementSelectedEventHandler.setElementSelected(directiveInfo.payload.playServiceId ,token, postback, callback)
+        return elementSelectedEventHandler.setElementSelected(directiveInfo.payload.playServiceId ,token, postback, null, callback)
     }
 
     override fun addListener(listener: DisplayAgentInterface.Listener) {
