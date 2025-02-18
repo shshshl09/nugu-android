@@ -68,11 +68,9 @@ object WebViewUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true)
         }*/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().run {
-                setAcceptCookie(true)
-                setAcceptThirdPartyCookies(webView, true)
-            }
+        CookieManager.getInstance().run {
+            setAcceptCookie(true)
+            setAcceptThirdPartyCookies(webView, true)
         }
     }
 }

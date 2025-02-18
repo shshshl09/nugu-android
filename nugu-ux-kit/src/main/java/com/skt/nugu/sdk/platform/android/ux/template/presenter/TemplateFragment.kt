@@ -49,6 +49,8 @@ class TemplateFragment : Fragment(), PlaylistStateListener {
         private const val ARG_DISPLAY_TYPE = "display_type"
         private const val ARG_PLAY_SERVICE_ID = "play_service_id"
 
+        private const val deviceTypeCode = "DVC_SPK_NU300"
+
         fun newInstance(
             nuguProvider: TemplateRenderer.NuguClientProvider,
             externalRenderer: TemplateRenderer.ExternalViewRenderer? = null,

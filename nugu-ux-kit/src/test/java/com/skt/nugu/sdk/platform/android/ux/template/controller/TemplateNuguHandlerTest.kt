@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyZeroInteractions
 
 class TemplateNuguHandlerTest {
     @Mock
@@ -73,19 +72,19 @@ class TemplateNuguHandlerTest {
     @Test
     fun testZeroInteractions() {
         nuguTemplateHandler.onCloseClicked()
-        verifyZeroInteractions(nuguAndroidClient)
+        verifyNoMoreInteractions(nuguAndroidClient)
 
         nuguTemplateHandler.onContextChanged("context")
-        verifyZeroInteractions(nuguAndroidClient)
+        verifyNoMoreInteractions(nuguAndroidClient)
 
         nuguTemplateHandler.onControlResult("action", "result")
-        verifyZeroInteractions(nuguAndroidClient)
+        verifyNoMoreInteractions(nuguAndroidClient)
 
         nuguTemplateHandler.showToast("toast")
-        verifyZeroInteractions(nuguAndroidClient)
+        verifyNoMoreInteractions(nuguAndroidClient)
 
         nuguTemplateHandler.showActivity("className")
-        verifyZeroInteractions(nuguAndroidClient)
+        verifyNoMoreInteractions(nuguAndroidClient)
     }
 
     @Test

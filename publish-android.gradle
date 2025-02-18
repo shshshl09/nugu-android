@@ -1,5 +1,21 @@
 apply plugin: 'maven-publish'
 
+//tasks {
+//    register<Jar>("withSourcesJar") {
+//        archiveClassifier.set("sources")
+//        from(android.sourceSets.getByName("main").java.srcDirs)
+//    }
+//}
+//
+//tasks {
+//    archiveClassifier.set("javadoc")
+//    dependsOn(named("withJavadoc"))
+//    def destination = named<Javadoc>("withJavadoc")
+//            .get()
+//            .destinationDir
+//    from(destination)
+//}
+
 afterEvaluate {
     publishing {
         Properties properties = new Properties()
@@ -10,7 +26,7 @@ afterEvaluate {
         def userName = properties['maven.userName']
         def passWord = properties['maven.password']
         def mavenTarget = ""
-        if (project.rootProject.publishSnapshot) {
+        if(project.rootProject.ext["PUBLISH_SNAPSHOT"]) {
             mavenTarget = "maven-snapshots"
         } else {
             mavenTarget = "maven-releases"
@@ -19,6 +35,7 @@ afterEvaluate {
         repositories {
             maven {
                 url "http://223.39.117.163:8081/repository/$mavenTarget/"
+                allowInsecureProtocol = true
                 credentials {
                     username userName
                     password passWord
@@ -27,6 +44,7 @@ afterEvaluate {
 
             maven {
                 url "http://223.39.117.164:8081/repository/$mavenTarget/"
+                allowInsecureProtocol = true
                 credentials {
                     username userName
                     password passWord
@@ -38,10 +56,11 @@ afterEvaluate {
             aar(MavenPublication) {
                 groupId = "com.skt.nugu.sdk"
 
-                from components.release
+//                from components.release
+                from components.findByName('release')
 
-                artifact sourceJar
-                artifact packageJavadoc
+//                artifact sourceJar
+//                artifact packageJavadoc
             }
         }
     }

@@ -57,7 +57,6 @@ class WebViewActivity : /**AppCompatActivity()**/
         //supportActionBar?.setDisplayShowTitleEnabled(false)
         setDefaultWebSettings(webView)
         webView.webViewClient = object : WebViewClient() {
-            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val uri = request?.url ?: return false
                 return handleUri(uri)
@@ -75,9 +74,7 @@ class WebViewActivity : /**AppCompatActivity()**/
             ) {
                 super.onReceivedError(view, request, error)
 
-                val message = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    "[onReceivedError] url=${view?.url}, requestUrl=${request?.url}, errorCode=${error?.errorCode}, description=${error?.description.toString()}"
-                     else "[onReceivedError] url=${view?.url}, error=${error?.toString()}"
+                val message = "[onReceivedError] url=${view?.url}, requestUrl=${request?.url}, errorCode=${error?.errorCode}, description=${error?.description.toString()}"
                 Logger.e(TAG, message)
             }
 
@@ -105,11 +102,7 @@ class WebViewActivity : /**AppCompatActivity()**/
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    CookieManager.getInstance().flush()
-                } else {
-                    CookieSyncManager.getInstance().sync()
-                }
+                CookieManager.getInstance().flush()
             }
         }
         intent.data?.apply {

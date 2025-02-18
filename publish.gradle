@@ -1,5 +1,10 @@
 apply plugin: 'maven-publish'
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 publishing {
     Properties properties = new Properties()
     if (project.rootProject.file('local.properties').canRead()) {
@@ -9,7 +14,7 @@ publishing {
     def userName = properties['maven.userName']
     def passWord = properties['maven.password']
     def mavenTarget = ""
-    if(project.rootProject.publishSnapshot) {
+    if(project.rootProject.ext["PUBLISH_SNAPSHOT"]) {
         mavenTarget = "maven-snapshots"
     } else {
         mavenTarget = "maven-releases"
@@ -18,17 +23,19 @@ publishing {
     repositories {
         maven {
             url "http://223.39.117.163:8081/repository/$mavenTarget/"
+            allowInsecureProtocol = true
             credentials {
-                username userName
-                password passWord
+                username = userName
+                password = passWord
             }
         }
 
         maven {
             url "http://223.39.117.164:8081/repository/$mavenTarget/"
+            allowInsecureProtocol = true
             credentials {
-                username userName
-                password passWord
+                username = userName
+                password = passWord
             }
         }
     }
@@ -38,9 +45,7 @@ publishing {
             groupId = "com.skt.nugu.sdk"
 
             from components.java
-
-            artifact sourceJar
-            artifact packageJavadoc
         }
     }
 }
+

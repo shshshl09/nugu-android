@@ -21,9 +21,9 @@ import androidx.core.content.res.ResourcesCompat
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.skt.nugu.sdk.platform.android.ux.R
 import com.google.android.material.snackbar.Snackbar
 import android.view.ViewGroup
+import com.skt.nugu.sdk.platform.android.ux.R
 
 
 /**
@@ -140,7 +140,7 @@ class NuguSnackbar(val parentView: View) {
             width = FrameLayout.LayoutParams.MATCH_PARENT
         }
         view.background = ContextCompat.getDrawable(view.context, R.drawable.nugu_rounded_snackbar_corners)
-        val textView = view.findViewById<TextView>(R.id.snackbar_text)
+        val textView = view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
         ResourcesCompat.getFont(view.context, R.font.noto_sans_kr_regular_hestia)?.apply {
             textView?.typeface = this
         }

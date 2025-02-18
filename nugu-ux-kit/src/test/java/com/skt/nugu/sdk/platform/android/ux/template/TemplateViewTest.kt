@@ -18,7 +18,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.O_MR1], manifest = Config.NONE)
+@Config(sdk = [Build.VERSION_CODES.Q], manifest = Config.NONE)
 class TemplateViewTest {
 
     @Test

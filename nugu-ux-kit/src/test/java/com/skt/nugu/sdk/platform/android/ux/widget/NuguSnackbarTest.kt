@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.O_MR1], manifest = Config.NONE)
+@Config(sdk = [Build.VERSION_CODES.Q], manifest = Config.NONE)
 class NuguSnackbarTest {
 
     private lateinit var nuguSnackbar: NuguSnackbar

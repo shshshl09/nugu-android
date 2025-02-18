@@ -19,11 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keepclassmembers enum com.skt.nugu.** { *; }
--keep class com.sktelecom.tyche.** { *; }
--keep class com.skt.nugu.silvertray.codec.CBROpusDecoder { *; }
--keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
-# Prevent R8 from leaving Data object members always null
--keepclassmembers,allowobfuscation class * {
-  @com.google.gson.annotations.SerializedName <fields>;
-}

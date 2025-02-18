@@ -1,0 +1,89 @@
+[versions]
+agp = "8.8.1"
+kotlin = "2.0.0"
+coreKtx = "1.15.0"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.10.0"
+composeBom = "2025.02.00"
+jetbrainsKotlinJvm = "2.0.0"
+gson = "2.10.1"                                         # https://github.com/google/gson/releases
+okhttp3Version = "4.12.0"
+grpc = "1.57.0"
+protoc = "3.21.7"
+protobufPlugin = "0.9.4"
+appcompat = "1.7.0"
+material = "1.12.0"
+silvertray = "4.5.0"
+jademarble = "0.2.7"
+keensense = "0.3.1"
+opusWrapper = "1.0.2-RELEASE"
+androidXBrowser = "1.8.0"
+json = "20231013"
+glide = "4.16.0"
+lottie = "6.0.0"
+dokka = "2.0.0"
+#### TEST ####
+androidXTestJunitKtx = "1.2.1"
+androidXTestCoreKtx = "1.6.1"
+robolectric = "4.13"
+junit = "4.13.2"
+androidxJunit = "1.2.1"
+espressoCore = "3.6.1"
+mokito = "5.15.2"
+mokitoKotlin = "3.1.0"
+androidxFragmentTesting = "1.8.6"
+androidxTestRunner = "1.6.2"
+androidxTestRules = "1.6.1"
+androidxTestEspressoWeb = "3.6.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mokito" }
+mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mokito" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mokitoKotlin" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3Version" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3Version" }
+grpc-protobuf-lite = { group = "io.grpc", name = "grpc-protobuf-lite", version.ref = "grpc" }
+grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
+grpc-okhttp = { group = "io.grpc", name = "grpc-okhttp", version.ref = "grpc" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+silvertray = { group = "com.skt.nugu", name = "silvertray", version.ref = "silvertray" }
+jademarble = { group = "com.skt.nugu", name = "jademarble", version.ref = "jademarble" }
+keensense = { group = "com.skt.nugu", name = "keensense", version.ref = "keensense" }
+opus-wrapper = { group = "com.skt.nugu.opus", name = "wrapper", version.ref = "opusWrapper" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidXBrowser" }
+androidx-test-ext-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidXTestJunitKtx" }
+androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "androidXTestCoreKtx" }
+json = { group = "org.json", name = "json", version.ref = "json" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
+androidx-fragment-testing = { group = "androidx.fragment", name = "fragment-testing", version.ref = "androidxFragmentTesting" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
+androidx-test-espresso-web = { group = "androidx.test.espresso", name = "espresso-web", version.ref = "androidxTestEspressoWeb" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+

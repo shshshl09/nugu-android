@@ -22,7 +22,7 @@ import com.skt.nugu.sdk.core.interfaces.interaction.InteractionControlMode
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class InteractionControlManagerTest {
     private val manager: InteractionControlManagerInterface = InteractionControlManager()
@@ -54,7 +54,7 @@ class InteractionControlManagerTest {
             addListener(listener)
             start(interactionControl)
             finish(interactionControl)
-            verifyZeroInteractions(listener)
+            verifyNoMoreInteractions(listener)
         }
     }
 
@@ -70,7 +70,7 @@ class InteractionControlManagerTest {
             removeListener(listener)
             start(interactionControl)
             finish(interactionControl)
-            verifyZeroInteractions(listener)
+            verifyNoMoreInteractions(listener)
         }
     }
 }

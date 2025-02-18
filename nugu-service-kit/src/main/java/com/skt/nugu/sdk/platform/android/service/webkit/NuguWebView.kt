@@ -297,11 +297,7 @@ class NuguWebView @JvmOverloads constructor(
                     Log.d(TAG, header.toString())
                 }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                CookieManager.getInstance().flush()
-            } else {
-                CookieSyncManager.getInstance().sync()
-            }
+            CookieManager.getInstance().flush()
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e(TAG, e.toString())
         } catch (e: AndroidRuntimeException) {
@@ -332,11 +328,7 @@ class NuguWebView @JvmOverloads constructor(
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                CookieManager.getInstance().flush()
-            } else {
-                CookieSyncManager.getInstance().sync()
-            }
+            CookieManager.getInstance().flush()
             webViewClientListener?.onPageFinished(url)
         }
 

@@ -88,7 +88,7 @@ class InterLayerDisplayPolicyManagerTest {
         val nullPlayServiceIdPlay: InterLayerDisplayPolicyManager.PlayLayer = mock()
         whenever(nullPlayServiceIdPlay.getPushPlayServiceId()).thenReturn(null)
         manager.onPlayStarted(nullPlayServiceIdPlay)
-        verifyZeroInteractions(evaporatableInfolayer)
+        verifyNoMoreInteractions(evaporatableInfolayer)
 
         val play1: InterLayerDisplayPolicyManager.PlayLayer = mock()
         whenever(play1.getPushPlayServiceId()).thenReturn(pushPlayServiceId2)
@@ -124,7 +124,7 @@ class InterLayerDisplayPolicyManagerTest {
         manager.onDisplayLayerRendered(layer)
         manager.onDisplayLayerCleared(layer)
 
-        verifyZeroInteractions(listener)
+        verifyNoMoreInteractions(listener)
     }
 
     @Test

@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.O_MR1], manifest = Config.NONE)
+@Config(sdk = [Build.VERSION_CODES.Q], manifest = Config.NONE)
 class TemplateUtilTest {
 
     @Test
@@ -57,7 +57,7 @@ class TemplateUtilTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
+    @Config(sdk = [Build.VERSION_CODES.Q])
     fun test_genColor_22() {
         val resources = (ApplicationProvider.getApplicationContext() as Context).resources
         resources.genColor(R.color.nugu_rounded_button_shape_border_color)
@@ -69,7 +69,7 @@ class TemplateUtilTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
+    @Config(sdk = [Build.VERSION_CODES.Q])
     fun test_getSpannable_22() {
         Assert.assertEquals(getSpannable("abcd").toString(), "abcd")
     }

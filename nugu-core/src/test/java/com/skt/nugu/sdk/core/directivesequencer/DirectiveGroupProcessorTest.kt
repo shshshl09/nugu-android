@@ -54,7 +54,7 @@ class DirectiveGroupProcessorTest {
 
         directiveGroupProcessor.onReceiveDirectives(directives)
 
-        verifyZeroInteractions(listener)
+        verifyNoMoreInteractions(listener)
     }
 
     @Test
@@ -64,6 +64,6 @@ class DirectiveGroupProcessorTest {
 
         directiveGroupProcessor.onReceiveDirectives(directives)
 
-        verifyZeroInteractions(preProcessor)
+        verifyNoMoreInteractions(preProcessor)
     }
 }

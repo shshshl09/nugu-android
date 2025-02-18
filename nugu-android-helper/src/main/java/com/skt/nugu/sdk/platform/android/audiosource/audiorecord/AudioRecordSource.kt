@@ -15,6 +15,7 @@
  */
 package com.skt.nugu.sdk.platform.android.audiosource.audiorecord
 
+import android.annotation.SuppressLint
 import android.media.AudioRecord
 import com.skt.nugu.sdk.core.utils.Logger
 import com.skt.nugu.sdk.platform.android.audiosource.AudioSource
@@ -36,6 +37,7 @@ internal open class AudioRecordSource(
 
     protected var audioRecord: AudioRecord? = null
 
+    @SuppressLint("MissingPermission")
     override fun open(): Boolean {
         Logger.d(TAG, "[open]")
         if(audioRecord != null) {
