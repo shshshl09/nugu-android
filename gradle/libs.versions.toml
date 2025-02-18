@@ -35,6 +35,7 @@ androidxFragmentTesting = "1.8.6"
 androidxTestRunner = "1.6.2"
 androidxTestRules = "1.6.1"
 androidxTestEspressoWeb = "3.6.1"
+tomcatAnnotationsApi = "6.0.53"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -77,6 +78,7 @@ androidx-fragment-testing = { group = "androidx.fragment", name = "fragment-test
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-espresso-web = { group = "androidx.test.espresso", name = "espresso-web", version.ref = "androidxTestEspressoWeb" }
+tomcat-annotations-api = { group = "org.apache.tomcat", name = "annotations-api", version.ref = "tomcatAnnotationsApi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
