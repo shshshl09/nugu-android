@@ -20,6 +20,7 @@ afterEvaluate {
         repositories {
             maven {
                 url "http://223.39.117.163:8081/repository/$mavenTarget/"
+                allowInsecureProtocol = true
                 credentials {
                     username userName
                     password passWord
@@ -28,6 +29,7 @@ afterEvaluate {
 
             maven {
                 url "http://223.39.117.164:8081/repository/$mavenTarget/"
+                allowInsecureProtocol = true
                 credentials {
                     username userName
                     password passWord
