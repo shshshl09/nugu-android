@@ -2,6 +2,7 @@ package com.skt.nugu.sdk.platform.android.ux.template.presenter
 
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -26,7 +27,7 @@ open class TemplateRenderer(
     protected val nuguClientProvider: NuguClientProvider,
     deviceTypeCode: String,
     fragmentManager: FragmentManager? = null,
-    protected val containerId: Int
+    val containerId: Int = View.generateViewId()
 ) : DisplayAggregatorInterface.Renderer, PlaylistRenderer, PlaylistEventListener {
 
     companion object {

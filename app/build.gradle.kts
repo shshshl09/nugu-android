@@ -37,10 +37,27 @@ android {
     buildFeatures {
         compose = true
     }
+    androidResources {
+        noCompress += "raw"
+    }
 }
 
 dependencies {
+    if (rootProject.extra["IS_RELEASE_MODE"] as Boolean) {
+        implementation("com.skt.nugu.sdk:nugu-android-helper:$version")
+        implementation("com.skt.nugu.sdk:nugu-ux-kit:$version")
+        implementation("com.skt.nugu.sdk:nugu-service-kit:$version")
+    } else {
+        implementation(project(":nugu-android-helper"))
+        implementation(project(":nugu-ux-kit"))
+        implementation(project(":nugu-service-kit"))
+    }
+    // include default resources
+    implementation("com.skt.nugu.jademarble:default-resource:0.2.7" )
+    implementation("com.skt.nugu.keensense:default-resource:0.3.1" )
 
+    implementation(libs.exoplayer.core)
+    implementation(libs.exoplayer.hls)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -49,6 +66,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,4 +74,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.fragment.ktx) // 또는 최신 버전 확인 후 적용
+
 }

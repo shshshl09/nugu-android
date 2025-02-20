@@ -1,5 +1,7 @@
 [versions]
 agp = "8.8.1"
+exoplayerHls = "2.19.1"
+fragmentKtx = "1.8.6"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 lifecycleRuntimeKtx = "2.8.7"
@@ -13,7 +15,7 @@ protoc = "3.21.7"
 protobufPlugin = "0.9.4"
 appcompat = "1.7.0"
 material = "1.12.0"
-silvertray = "4.5.0"
+silvertray = "5.0.0"
 jademarble = "0.2.7"
 keensense = "0.3.1"
 opusWrapper = "1.0.2-RELEASE"
@@ -39,6 +41,9 @@ tomcatAnnotationsApi = "6.0.53"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayerHls" }
+exoplayer-hls = { module = "com.google.android.exoplayer:exoplayer-hls", version.ref = "exoplayerHls" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -88,4 +93,3 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-
