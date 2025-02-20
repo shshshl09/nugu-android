@@ -15,7 +15,7 @@ val baseNuguVersionName = "2.0.0"
 var nuguVersionCode: Int
 var nuguVersionName: String
 
-if (rootProject.extra.has("publishSnapshot") && rootProject.extra["publishSnapshot"] as Boolean) {
+if (rootProject.extra.has("PUBLISH_SNAPSHOT") && rootProject.extra["PUBLISH_SNAPSHOT"] as Boolean) {
     val timestamp = System.getenv("SNAPSHOT_TIMESTAMP") ?: "unknown"
     nuguVersionCode = baseNuguVersionCode + 1
     nuguVersionName = "${getVersionNameFromCode(nuguVersionCode)}-$timestamp-SNAPSHOT"

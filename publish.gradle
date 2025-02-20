@@ -9,7 +9,9 @@ publishing {
     def userName = properties['maven.userName']
     def passWord = properties['maven.password']
     def mavenTarget = ""
-    if(project.rootProject.publishSnapshot) {
+
+    def isSnapshot = Boolean.parseBoolean(System.getenv("PUBLISH_SNAPSHOT")) ?: false
+    if(isSnapshot) {
         mavenTarget = "maven-snapshots"
     } else {
         mavenTarget = "maven-releases"
@@ -34,13 +36,11 @@ publishing {
     }
 
     publications {
-        mavenJava(MavenPublication) {
-            groupId = "com.skt.nugu.sdk"
-
-            from components.java
-
-            artifact sourceJar
-            artifact packageJavadoc
+        group = "com.skt.nugu.sdk"
+        release(MavenPublication) {
+            afterEvaluate {
+                from components.java
+            }
         }
     }
 }
