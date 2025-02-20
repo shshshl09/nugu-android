@@ -157,6 +157,14 @@ class IntegratedMediaPlayer(
         return convertSourceIdFromTtsToIntegrated(ttsPlayer.setSource(attachmentReader))
     }
 
+    override fun setSource(
+        attachmentReader: Attachment.Reader,
+        format: AttachmentSourcePlayable.MediaFormat
+    ): SourceId {
+        activePlayer = ttsPlayer
+        return convertSourceIdFromTtsToIntegrated(ttsPlayer.setSource(attachmentReader, format))
+    }
+
     override fun setSource(uri: URI, cacheKey: CacheKey?): SourceId {
         activePlayer = audioPlayer
         return convertSourceIdFromAudioPlayerToIntegrated(audioPlayer.setSource(uri, cacheKey))

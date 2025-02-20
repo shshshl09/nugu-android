@@ -16,6 +16,7 @@
 package com.skt.nugu.sdk.external.silvertray
 
 import com.skt.nugu.silvertray.player.Player
+import com.skt.nugu.silvertray.source.DataSource
 
 /**
  * Porting class silvertray's [Player] to use in NUGU SDK
@@ -23,7 +24,7 @@ import com.skt.nugu.silvertray.player.Player
 class NuguOpusPlayer(private val streamType: Int, player: Player = Player()) :
     AbstractNuguOpusPlayer(player) {
 
-    override fun prepareSource(source: RawCBRStreamSource) {
+    override fun prepareSource(source: DataSource) {
         player.prepare(source, streamType)
     }
 }

@@ -60,7 +60,14 @@ interface MediaPlayerControlInterface {
 }
 
 interface AttachmentSourcePlayable {
+    data class MediaFormat(
+        val mimeType: String,
+        val sampleRateHz: Int,
+        val bitsPerSample: Int
+    )
+
     fun setSource(attachmentReader: Attachment.Reader): SourceId
+    fun setSource(attachmentReader: Attachment.Reader, format: MediaFormat): SourceId
 }
 
 data class CacheKey(

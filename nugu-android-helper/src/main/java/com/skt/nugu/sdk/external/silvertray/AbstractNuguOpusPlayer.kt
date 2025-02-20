@@ -1,6 +1,7 @@
 package com.skt.nugu.sdk.external.silvertray
 
 import com.skt.nugu.sdk.agent.mediaplayer.AttachmentPlayablePlayer
+import com.skt.nugu.sdk.agent.mediaplayer.AttachmentSourcePlayable
 import com.skt.nugu.sdk.agent.mediaplayer.ErrorType
 import com.skt.nugu.sdk.agent.mediaplayer.MediaPlayerControlInterface
 import com.skt.nugu.sdk.agent.mediaplayer.SourceId
@@ -11,6 +12,7 @@ import com.skt.nugu.silvertray.player.DurationListener
 import com.skt.nugu.silvertray.player.EventListener
 import com.skt.nugu.silvertray.player.Player
 import com.skt.nugu.silvertray.player.Status
+import com.skt.nugu.silvertray.source.DataSource
 
 abstract class AbstractNuguOpusPlayer(protected val player: Player = Player()): AttachmentPlayablePlayer {
     companion object {
@@ -84,6 +86,7 @@ abstract class AbstractNuguOpusPlayer(protected val player: Player = Player()): 
     }
 
     override fun setSource(attachmentReader: Attachment.Reader): SourceId {
+        // TODO : replace by setSource(Attachment.Reader, AttachmentSourcePlayable.MediaFormat)
         if(status == Status.READY || status == Status.STARTED) {
             player.reset()
         }
@@ -94,7 +97,28 @@ abstract class AbstractNuguOpusPlayer(protected val player: Player = Player()): 
         return currentSourceId
     }
 
-    internal abstract fun prepareSource(source: RawCBRStreamSource)
+    override fun setSource(
+        attachmentReader: Attachment.Reader,
+        format: AttachmentSourcePlayable.MediaFormat
+    ): SourceId {
+        if(status == Status.READY || status == Status.STARTED) {
+            player.reset()
+        }
+
+        prepareSource(
+            when(format.mimeType) {
+                LinearPCMStreamSource.MIME_TYPE -> LinearPCMStreamSource(attachmentReader, format)
+                // for backward compatibility
+                else -> RawCBRStreamSource(attachmentReader)
+            }
+        )
+
+        currentSourceId.id++
+        Logger.d(TAG, "[setSource] ${currentSourceId.id}")
+        return currentSourceId
+    }
+
+    internal abstract fun prepareSource(source: DataSource)
 
     override fun play(id: SourceId): Boolean {
         if(currentSourceId.id != id.id) {

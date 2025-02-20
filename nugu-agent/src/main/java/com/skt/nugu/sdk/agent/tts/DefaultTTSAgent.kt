@@ -19,6 +19,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.skt.nugu.sdk.agent.AbstractCapabilityAgent
 import com.skt.nugu.sdk.agent.common.tts.TTSPlayContextProvider
+import com.skt.nugu.sdk.agent.mediaplayer.AttachmentSourcePlayable
 import com.skt.nugu.sdk.agent.mediaplayer.ErrorType
 import com.skt.nugu.sdk.agent.mediaplayer.MediaPlayerControlInterface
 import com.skt.nugu.sdk.agent.mediaplayer.MediaPlayerInterface
@@ -81,6 +82,8 @@ class DefaultTTSAgent(
         val text: String?,
         @SerializedName("token")
         val token: String,
+        @SerializedName("codec")
+        val codec: String?,
         @SerializedName("playStackControl")
         val playStackControl: PlayStackControl?
     )
@@ -148,7 +151,8 @@ class DefaultTTSAgent(
                                             }
 
                                             isPlaybackInitiated = true
-                                            startPlaying()
+
+                                            startPlaying(payload.codec)
                                             countDownLatch.countDown()
                                         }
 
@@ -228,9 +232,14 @@ class DefaultTTSAgent(
             }
         }
 
-        private fun startPlaying() {
+        private fun startPlaying(codec: String?) {
             directive.getAttachmentReader()?.let {
-                val sourceId = speechPlayer.setSource(it)
+                val mediaFormat = getMediaFormatFromCodec(codec)
+                val sourceId = if (mediaFormat == null) {
+                    speechPlayer.setSource(it)
+                } else {
+                    speechPlayer.setSource(it, mediaFormat)
+                }
                 speechPlayer.setVolume(volume)
                 this.sourceId = sourceId
                 Logger.d(TAG, "[startPlaying] sourceId: $this, info: $this@SpeakDirectiveInfo")
@@ -308,6 +317,16 @@ class DefaultTTSAgent(
                 finishListeners.remove(listener)
             }
         }
+    }
+
+    private fun getMediaFormatFromCodec(codec: String?): AttachmentSourcePlayable.MediaFormat? {
+        codec?: return null
+
+        if(codec.lowercase().startsWith("audio/l16")) {
+            return AttachmentSourcePlayable.MediaFormat("audio/l16", 24000, 2)
+        }
+
+        return null
     }
 
     private val executor = Executors.newSingleThreadExecutor()

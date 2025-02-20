@@ -18,6 +18,7 @@ package com.skt.nugu.sdk.external.silvertray
 
 import android.media.AudioAttributes
 import com.skt.nugu.silvertray.player.Player
+import com.skt.nugu.silvertray.source.DataSource
 
 class NuguOpusPlayer2 (private val audioAttributes: AudioAttributes, player: Player = Player()) :
     AbstractNuguOpusPlayer(player) {
@@ -25,7 +26,7 @@ class NuguOpusPlayer2 (private val audioAttributes: AudioAttributes, player: Pla
         private const val TAG = "NuguOpusPlayer2"
     }
 
-    override fun prepareSource(source: RawCBRStreamSource) {
+    override fun prepareSource(source: DataSource) {
         player.prepare(source, audioAttributes)
     }
 }
