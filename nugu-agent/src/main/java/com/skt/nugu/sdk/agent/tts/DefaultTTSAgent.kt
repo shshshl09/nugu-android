@@ -322,7 +322,7 @@ class DefaultTTSAgent(
     private fun getMediaFormatFromCodec(codec: String?): AttachmentSourcePlayable.MediaFormat? {
         codec?: return null
 
-        if(codec.lowercase().startsWith("audio/l16")) {
+        if(codec.uppercase().startsWith("PCM16")) {
             return AttachmentSourcePlayable.MediaFormat("audio/l16", 24000, 2)
         }
 
