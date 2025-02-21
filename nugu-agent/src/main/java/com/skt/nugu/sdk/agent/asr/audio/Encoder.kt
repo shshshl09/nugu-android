@@ -15,8 +15,6 @@
  */
 package com.skt.nugu.sdk.agent.asr.audio
 
-import com.skt.nugu.sdk.agent.asr.audio.AudioFormat
-
 /**
  * Provide a encoder interface
  */

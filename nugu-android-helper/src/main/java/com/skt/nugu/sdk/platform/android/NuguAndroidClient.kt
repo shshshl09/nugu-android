@@ -28,6 +28,7 @@ import com.skt.nugu.sdk.agent.asr.audio.AudioEndPointDetector
 import com.skt.nugu.sdk.agent.asr.audio.AudioFormat
 import com.skt.nugu.sdk.agent.asr.audio.AudioProvider
 import com.skt.nugu.sdk.agent.asr.audio.Encoder
+import com.skt.nugu.sdk.agent.asr.realtime.TestRealtimeASRAgent
 import com.skt.nugu.sdk.agent.audioplayer.AudioPlayerAgentInterface
 import com.skt.nugu.sdk.agent.audioplayer.AudioPlayerDirectivePreProcessor
 import com.skt.nugu.sdk.agent.audioplayer.lyrics.AudioPlayerLyricsDirectiveHandler
@@ -548,44 +549,60 @@ class NuguAndroidClient private constructor(
                     )
                 })
 
-                addAgentFactory(DefaultASRAgent.NAMESPACE, object : AgentFactory<DefaultASRAgent> {
-                    override fun create(container: SdkContainer): DefaultASRAgent {
-                        return with(container) {
-                            val model = builder.endPointDetectorModelFilePath
-                            val endpointDetector = if (model != null) {
-                                EndPointDetector(model)
-                            } else {
-                                builder.endPointDetector
-                            }
-
-                            DefaultASRAgent(
-                                getInputManagerProcessor(),
-                                getDirectiveSequencer(),
-                                getDirectiveGroupProcessor(),
-                                getAudioSeamlessFocusManager(),
-                                getMessageSender(),
-                                getContextManager(),
-                                getSessionManager(),
-                                getDialogAttributeStorage(),
-                                builder.defaultAudioProvider,
-                                builder.asrEncoder,
-                                endpointDetector,
-                                builder.defaultEpdTimeoutMillis,
-                                DefaultFocusChannel.USER_ASR_CHANNEL_NAME,
-                                DefaultFocusChannel.DM_ASR_CHANNEL_NAME,
-                                getPlaySynchronizer(),
-                                getInteractionControlManager(),
-                                builder.expectSpeechHandler
-                            ).apply {
-                                getDirectiveSequencer().addDirectiveHandler(this)
-
-                                CancelRecognizeDirectiveHandler(this).apply {
+                addAgentFactory(
+                    TestRealtimeASRAgent.NAMESPACE,
+                    object : AgentFactory<TestRealtimeASRAgent> {
+                        override fun create(container: SdkContainer): TestRealtimeASRAgent {
+                            return with(container) {
+                                TestRealtimeASRAgent(getMessageSender(), getContextManager()).apply {
                                     getDirectiveSequencer().addDirectiveHandler(this)
+
+                                    CancelRecognizeDirectiveHandler(this).apply {
+                                        getDirectiveSequencer().addDirectiveHandler(this)
+                                    }
                                 }
                             }
                         }
-                    }
-                })
+                    })
+
+//                addAgentFactory(DefaultASRAgent.NAMESPACE, object : AgentFactory<DefaultASRAgent> {
+//                    override fun create(container: SdkContainer): DefaultASRAgent {
+//                        return with(container) {
+//                            val model = builder.endPointDetectorModelFilePath
+//                            val endpointDetector = if (model != null) {
+//                                EndPointDetector(model)
+//                            } else {
+//                                builder.endPointDetector
+//                            }
+//
+//                            DefaultASRAgent(
+//                                getInputManagerProcessor(),
+//                                getDirectiveSequencer(),
+//                                getDirectiveGroupProcessor(),
+//                                getAudioSeamlessFocusManager(),
+//                                getMessageSender(),
+//                                getContextManager(),
+//                                getSessionManager(),
+//                                getDialogAttributeStorage(),
+//                                builder.defaultAudioProvider,
+//                                builder.asrEncoder,
+//                                endpointDetector,
+//                                builder.defaultEpdTimeoutMillis,
+//                                DefaultFocusChannel.USER_ASR_CHANNEL_NAME,
+//                                DefaultFocusChannel.DM_ASR_CHANNEL_NAME,
+//                                getPlaySynchronizer(),
+//                                getInteractionControlManager(),
+//                                builder.expectSpeechHandler
+//                            ).apply {
+//                                getDirectiveSequencer().addDirectiveHandler(this)
+//
+//                                CancelRecognizeDirectiveHandler(this).apply {
+//                                    getDirectiveSequencer().addDirectiveHandler(this)
+//                                }
+//                            }
+//                        }
+//                    }
+//                })
 
                 addAgentFactory(
                     DefaultSpeakerAgent.NAMESPACE,
