@@ -9,9 +9,10 @@ plugins {
 }
 
 allprojects {
-    apply(from = "${rootDir}/versions.gradle.kts")
     rootProject.extra["IS_RELEASE_MODE"] = (System.getenv("IS_RELEASE_MODE") ?: "FALSE").toBoolean()
     rootProject.extra["PUBLISH_SNAPSHOT"] = (System.getenv("PUBLISH_SNAPSHOT") ?: "FALSE").toBoolean()
+
+    apply(from = "${rootDir}/versions.gradle.kts")
 }
 
 subprojects {
